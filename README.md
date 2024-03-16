@@ -721,7 +721,7 @@ processFiles(['file1.txt', 'file2.txt', 'file3.txt'], (contents) => {
   console.log('File Contents:', contents);
 });
 
-<h1>sending files in Node.js</h1>
+<h3>sending files in Node.js</h3>
 
 1. **File Sending API Endpoint**:
 
@@ -989,6 +989,120 @@ app.post('/upload', authenticate, upload.single('file'), (req, res) => {
     res.send('File uploaded successfully.');
 });
 ```
+
+<h4>here are 50 question answer </h4>
+
+1. **Reverse a string:**
+   ```javascript
+   function reverseString(str) {
+       return str.split('').reverse().join('');
+   }
+
+   // Example usage:
+   console.log(reverseString("hello")); // Output: "olleh"
+   ```
+
+2. **Check if a string is a palindrome:**
+   ```javascript
+   function isPalindrome(str) {
+       const reversed = str.split('').reverse().join('');
+       return str === reversed;
+   }
+
+   // Example usage:
+   console.log(isPalindrome("madam")); // Output: true
+   console.log(isPalindrome("hello")); // Output: false
+   ```
+
+3. **Find the maximum number in an array:**
+   ```javascript
+   function findMax(arr) {
+       return Math.max(...arr);
+   }
+
+   // Example usage:
+   console.log(findMax([5, 3, 9, 2])); // Output: 9
+   ```
+
+4. **Find the minimum number in an array:**
+   ```javascript
+   function findMin(arr) {
+       return Math.min(...arr);
+   }
+
+   // Example usage:
+   console.log(findMin([5, 3, 9, 2])); // Output: 2
+   ```
+
+5. **Implement a function to sort an array:**
+   ```javascript
+   function customSort(arr) {
+       return arr.sort((a, b) => a - b);
+   }
+
+   // Example usage:
+   console.log(customSort([5, 3, 9, 2])); // Output: [2, 3, 5, 9]
+   ```
+
+6. **Check if two strings are anagrams:**
+   ```javascript
+   function areAnagrams(str1, str2) {
+       const sortedStr1 = str1.split('').sort().join('');
+       const sortedStr2 = str2.split('').sort().join('');
+       return sortedStr1 === sortedStr2;
+   }
+
+   // Example usage:
+   console.log(areAnagrams("listen", "silent")); // Output: true
+   console.log(areAnagrams("hello", "world")); // Output: false
+   ```
+
+7. **Implement a function to remove duplicates from an array:**
+   ```javascript
+   function removeDuplicates(arr) {
+       return [...new Set(arr)];
+   }
+
+   // Example usage:
+   console.log(removeDuplicates([1, 2, 2, 3, 4, 4, 5])); // Output: [1, 2, 3, 4, 5]
+   ```
+
+8. **Check if a given number is prime:**
+   ```javascript
+   function isPrime(num) {
+       if (num <= 1) return false;
+       if (num === 2) return true;
+       for (let i = 2; i <= Math.sqrt(num); i++) {
+           if (num % i === 0) return false;
+       }
+       return true;
+   }
+
+   // Example usage:
+   console.log(isPrime(7)); // Output: true
+   console.log(isPrime(10)); // Output: false
+   ```
+
+9. **Implement a function to calculate the Fibonacci sequence:**
+   ```javascript
+   function fibonacci(n) {
+       if (n <= 1) return n;
+       return fibonacci(n - 1) + fibonacci(n - 2);
+   }
+
+   // Example usage:
+   console.log(fibonacci(7)); // Output: 13 (0, 1, 1, 2, 3, 5, 8, 13)
+   ```
+
+10. **Implement a function to flatten a nested array:**
+    ```javascript
+    function flattenArray(arr) {
+        return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenArray(val)) : acc.concat(val), []);
+    }
+
+    // Example usage:
+    console.log(flattenArray([1, [2, [3, 4]], 5])); // Output: [1, 2, 3, 4, 5]
+    ```
 
 
 

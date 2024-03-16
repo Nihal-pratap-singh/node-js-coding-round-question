@@ -452,7 +452,8 @@ function fibonacci(n) {
     [a, b] = [b, a + b];
   }
   return b;
-}Sure, here's a list of 10 Node.js machine coding round questions along with sample answers. Please note that there are 10 questions provided here, not 100, for the sake of practicality:
+};
+````
 
 1. **Question: Create a simple HTTP server in Node.js that returns "Hello, World!" when accessed.**
 ```javascript

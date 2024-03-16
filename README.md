@@ -452,7 +452,546 @@ function fibonacci(n) {
     [a, b] = [b, a + b];
   }
   return b;
-}
+}Sure, here's a list of 10 Node.js machine coding round questions along with sample answers. Please note that there are 10 questions provided here, not 100, for the sake of practicality:
+
+1. **Question: Create a simple HTTP server in Node.js that returns "Hello, World!" when accessed.**
+```javascript
+// Answer:
+const http = require('http');
+const server = http.createServer((req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello, World!\n');
+});
+server.listen(3000, 'localhost', () => {
+  console.log('Server running at http://localhost:3000/');
+});
 ```
+
+2. **Question: Write a function in Node.js to find the factorial of a given number.**
+```javascript
+// Answer:
+function factorial(n) {
+  if (n === 0 || n === 1) return 1;
+  return n * factorial(n - 1);
+}
+console.log(factorial(5)); // Output: 120
+```
+
+3. **Question: Implement a basic CRUD (Create, Read, Update, Delete) API using Express.js and MongoDB.**
+```javascript
+// Answer:
+// (Assuming MongoDB is running locally)
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const app = express();
+app.use(bodyParser.json());
+
+const Schema = mongoose.Schema;
+const userSchema = new Schema({
+  name: String,
+  email: String,
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Routes
+app.post('/users', async (req, res) => {
+  const user = new User(req.body);
+  await user.save();
+  res.send(user);
+});
+
+app.get('/users', async (req, res) => {
+  const users = await User.find();
+  res.send(users);
+});
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+```
+
+4. **Question: Write a function in Node.js to reverse a string.**
+```javascript
+// Answer:
+function reverseString(str) {
+  return str.split('').reverse().join('');
+}
+console.log(reverseString('hello')); // Output: 'olleh'
+```
+
+5. **Question: Implement a basic authentication system using JSON Web Tokens (JWT) in Node.js.**
+```javascript
+// Answer:
+const jwt = require('jsonwebtoken');
+const secretKey = 'your-secret-key';
+
+function generateToken(user) {
+  return jwt.sign({ user }, secretKey, { expiresIn: '1h' });
+}
+
+function verifyToken(token) {
+  try {
+    return jwt.verify(token, secretKey);
+  } catch (err) {
+    return null;
+  }
+}
+
+const user = { id: 1, username: 'example_user' };
+const token = generateToken(user);
+console.log(token);
+
+const decoded = verifyToken(token);
+console.log(decoded);
+```
+
+6. **Question: Write a function in Node.js to check if a given string is a palindrome.**
+```javascript
+// Answer:
+function isPalindrome(str) {
+  const reversed = str.split('').reverse().join('');
+  return str === reversed;
+}
+console.log(isPalindrome('racecar')); // Output: true
+```
+
+7. **Question: Create a script in Node.js to read a JSON file and print its content.**
+```javascript
+// Answer:
+const fs = require('fs');
+
+fs.readFile('data.json', 'utf8', (err, data) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  console.log(data);
+});
+```
+
+8. **Question: Implement a function in Node.js to find the maximum number in an array.**
+```javascript
+// Answer:
+function findMax(arr) {
+  return Math.max(...arr);
+}
+console.log(findMax([1, 5, 3, 9, 2])); // Output: 9
+```
+
+9. **Question: Write a function in Node.js to sort an array of numbers in ascending order.**
+```javascript
+// Answer:
+function sortAscending(arr) {
+  return arr.sort((a, b) => a - b);
+}
+console.log(sortAscending([3, 1, 4, 2])); // Output: [1, 2, 3, 4]
+```
+
+10. **Question: Create a script in Node.js to make an HTTP request to an external API and log the response.**
+```javascript
+// Answer:
+const https = require('https');
+
+https.get('https://api.example.com/data', (resp) => {
+  let data = '';
+
+  // A chunk of data has been received.
+  resp.on('data', (chunk) => {
+    data += chunk;
+  });
+
+  // The whole response has been received. Print out the result.
+  resp.on('end', () => {
+    console.log(JSON.parse(data));
+  });
+
+}).on('error', (err) => {
+  console.log('Error: ' + err.message);
+});
+```
+
+<h1>Here are five coding questions that focus on the callback concept in Node.js, which are commonly asked in job interviews:</h1>
+
+1. **Question: Write a function `sumAsync` in Node.js that takes two numbers and a callback function as arguments. Inside the function, perform the addition asynchronously and invoke the callback with the result.**
+
+```javascript
+// Answer:
+function sumAsync(num1, num2, callback) {
+  setTimeout(() => {
+    const result = num1 + num2;
+    callback(result);
+  }, 1000); // Simulating delay of 1 second
+}
+
+// Usage
+sumAsync(3, 5, (result) => {
+  console.log('Sum:', result);
+});
+```
+
+2. **Question: Implement a function `findLargest` in Node.js that takes an array of numbers and a callback function. The function should find the largest number in the array asynchronously and invoke the callback with the result.**
+
+```javascript
+// Answer:
+function findLargest(numbers, callback) {
+  setTimeout(() => {
+    const largest = Math.max(...numbers);
+    callback(largest);
+  }, 1000); // Simulating delay of 1 second
+}
+
+// Usage
+findLargest([10, 5, 8, 20, 15], (result) => {
+  console.log('Largest Number:', result);
+});
+```
+
+3. **Question: Write a function `filterEven` in Node.js that takes an array of numbers and a callback function. The function should filter out the even numbers from the array asynchronously and invoke the callback with the filtered result.**
+
+```javascript
+// Answer:
+function filterEven(numbers, callback) {
+  setTimeout(() => {
+    const evenNumbers = numbers.filter(num => num % 2 === 0);
+    callback(evenNumbers);
+  }, 1000); // Simulating delay of 1 second
+}
+
+// Usage
+filterEven([1, 2, 3, 4, 5, 6, 7, 8, 9], (result) => {
+  console.log('Even Numbers:', result);
+});
+```
+
+4. **Question: Implement a function `fetchData` in Node.js that simulates fetching data from an API asynchronously. The function should take a URL and a callback function. It should fetch data from the URL and invoke the callback with the fetched data.**
+
+```javascript
+// Answer:
+const axios = require('axios');
+
+function fetchData(url, callback) {
+  axios.get(url)
+    .then(response => {
+      callback(response.data);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+}
+
+// Usage
+fetchData('https://jsonplaceholder.typicode.com/posts/1', (data) => {
+  console.log('Fetched Data:', data);
+});
+```
+
+5. **Question: Write a function `processFiles` in Node.js that processes an array of file paths asynchronously. The function should read each file and invoke a callback with its content.**
+
+```javascript
+// Answer:
+const fs = require('fs');
+
+function processFiles(filePaths, callback) {
+  const fileContents = [];
+  let filesProcessed = 0;
+
+  filePaths.forEach(filePath => {
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Error reading file:', err);
+        return;
+      }
+      fileContents.push(data);
+      filesProcessed++;
+      if (filesProcessed === filePaths.length) {
+        callback(fileContents);
+      }
+    });
+  });
+}
+
+// Usage
+processFiles(['file1.txt', 'file2.txt', 'file3.txt'], (contents) => {
+  console.log('File Contents:', contents);
+});
+
+<h1>sending files in Node.js</h1>
+
+1. **File Sending API Endpoint**:
+
+**Question**:
+Write a Node.js API endpoint using Express.js that sends a file to the client upon receiving a GET request. The endpoint should accept a file path as a parameter, read the file from the server's filesystem, and send it as a response to the client. Handle errors appropriately, such as file not found or inaccessible file paths.
+
+**Solution**:
+
+```javascript
+const express = require('express');
+const fs = require('fs');
+const app = express();
+
+app.get('/download/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = `./uploads/${filename}`;
+
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            res.status(404).send('File not found.');
+            return;
+        }
+        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+        res.send(data);
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+2. **Secure File Sending with Authentication**:
+
+**Question**:
+Extend the previous scenario to include user authentication. Modify the file sending endpoint to require user authentication. Only authenticated users with the correct permissions should be able to access and download files from the server.
+
+**Solution**:
+
+```javascript
+// Implement authentication middleware (e.g., using JWT or sessions)
+function authenticate(req, res, next) {
+    // Check authentication logic here
+    // For example, verify JWT token or check session
+    // For simplicity, let's assume authentication is handled elsewhere
+    const isAuthenticated = true; // Sample authentication logic
+    if (isAuthenticated) {
+        next();
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+}
+
+app.get('/download/:filename', authenticate, (req, res) => {
+    // Same as previous solution
+    // Only authenticated users can access this endpoint
+});
+```
+
+3. **Chunked File Sending**:
+
+**Question**:
+Implement a Node.js application that sends large files to clients in smaller, manageable chunks. Create a mechanism to read the file in chunks from the server's filesystem and send them as separate responses to the client. Ensure that the client can assemble the chunks into the original file.
+
+**Solution**:
+
+```javascript
+// Chunked file sending logic can be implemented using streams
+const fileStream = fs.createReadStream(filePath);
+fileStream.on('data', (chunk) => {
+    res.write(chunk);
+});
+fileStream.on('end', () => {
+    res.end();
+});
+```
+
+4. **File Streaming for Large File Sending**:
+
+**Question**:
+Develop a Node.js application that efficiently streams large files to clients. Implement a file streaming mechanism that reads chunks of a file from the server's filesystem and streams them as responses to clients. Optimize the streaming process to handle large files without consuming excessive memory or causing performance issues.
+
+**Solution**:
+
+```javascript
+const fileStream = fs.createReadStream(filePath);
+fileStream.pipe(res);
+```
+
+5. **Progressive File Sending**:
+
+**Question**:
+Extend an existing Node.js file sending application to support progressive file sending. Implement a mechanism to send the file to the client progressively, meaning the client should start receiving and rendering the file content as soon as the initial portion is available, without waiting for the entire file to be transferred.
+
+**Solution**:
+
+```javascript
+// Implement a streaming response with 'data' event
+const fileStream = fs.createReadStream(filePath);
+fileStream.on('data', (chunk) => {
+    res.write(chunk);
+});
+fileStream.on('end', () => {
+    res.end();
+});
+
+
+<h1> file upload concepts in Node.js  </h1>
+
+1. **File Upload API Endpoint**:
+
+**Question**:
+Write a Node.js API endpoint using Express.js that accepts file uploads. The endpoint should accept multipart form-data POST requests containing a file, and upon successful upload, should respond with a success message. Include error handling for cases where no file is provided or if the file size exceeds a specified limit.
+
+**Solution**:
+```javascript
+const express = require('express');
+const multer = require('multer');
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    // File upload successful
+    res.send('File uploaded successfully.');
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+2. **Image Resizing on Upload**:
+
+**Question**:
+Create a Node.js script that accepts an image upload and resizes it to specified dimensions (e.g., 300x300 pixels). Use the `multer` middleware for handling file uploads and `sharp` for image resizing. Ensure proper error handling for invalid image uploads or resizing failures.
+
+**Solution**:
+```javascript
+const express = require('express');
+const multer = require('multer');
+const sharp = require('sharp');
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No image uploaded.');
+    }
+    sharp(req.file.path)
+        .resize(300, 300)
+        .toFile('uploads/resized_image.jpg', (err) => {
+            if (err) {
+                return res.status(500).send('Error resizing image.');
+            }
+            res.send('Image uploaded and resized successfully.');
+        });
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+3. **CSV File Processing**:
+
+**Question**:
+Implement a Node.js script that accepts CSV file uploads and processes the data within the CSV file. Upon upload, parse the CSV file and log its contents to the console. Handle errors gracefully, such as incorrect file format or parsing failures.
+
+**Solution**:
+```javascript
+const express = require('express');
+const multer = require('multer');
+const csv = require('csv-parser');
+const fs = require('fs');
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('csv'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No CSV file uploaded.');
+    }
+    const results = [];
+    fs.createReadStream(req.file.path)
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', () => {
+            console.log(results);
+            res.send('CSV file uploaded and processed successfully.');
+        })
+        .on('error', (err) => {
+            console.error('Error parsing CSV:', err);
+            res.status(500).send('Error parsing CSV file.');
+        });
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+4. **File Upload Progress Tracking**:
+
+**Question**:
+Develop a Node.js application that allows users to track the progress of file uploads. Use `express` and `multer` to handle file uploads and implement a progress bar or percentage indicator to display the progress of the file upload in real-time on the client-side.
+
+**Solution**:
+```javascript
+// Progress tracking can be achieved using the `progress` event provided by `multer`
+const express = require('express');
+const multer = require('multer');
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    // Upload progress tracking
+    upload(req, res, function (err) {
+        if (err) {
+            console.error('Error uploading file:', err);
+            return res.status(500).send('Error uploading file.');
+        }
+        // File upload successful
+        res.send('File uploaded successfully.');
+    });
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+5. **File Upload with Authentication**:
+
+**Question**:
+Extend an existing Node.js application with user authentication to support secure file uploads. Ensure that only authenticated users can upload files. Implement role-based access control to allow certain users (e.g., administrators) to upload files of any size while restricting others to smaller file sizes.
+
+**Solution**:
+```javascript
+// Implement authentication middleware (e.g., using JWT or sessions)
+function authenticate(req, res, next) {
+    // Check authentication logic here
+    // For example, verify JWT token or check session
+    // For simplicity, let's assume authentication is handled elsewhere
+    const isAuthenticated = true; // Sample authentication logic
+    if (isAuthenticated) {
+        next();
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+}
+
+const upload = multer({
+    dest: 'uploads/',
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB file size limit
+});
+
+app.post('/upload', authenticate, upload.single('file'), (req, res) => {
+    // Only authenticated users can upload files
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    // File upload successful
+    res.send('File uploaded successfully.');
+});
+```
+
+
+
+
+
 
 These questions cover a variety of topics and difficulty levels commonly encountered in Node.js coding interviews.

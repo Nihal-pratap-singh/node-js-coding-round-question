@@ -1,0 +1,921 @@
+<h1> Here are 50 coding questions related to Express.js for a job interview, along with their answers:</h1>
+
+1. **Creating a Basic Express Server:**
+
+   **Question:** Write a code snippet to create a basic Express server listening on port 3000.
+
+   **Answer:**
+   ```javascript
+   const express = require('express');
+   const app = express();
+
+   app.listen(3000, () => {
+       console.log('Server is running on port 3000');
+   });
+   ```
+
+2. **Defining a Route:**
+
+   **Question:** Write a route to handle GET requests to '/hello' and respond with 'Hello, World!'.
+
+   **Answer:**
+   ```javascript
+   app.get('/hello', (req, res) => {
+       res.send('Hello, World!');
+   });
+   ```
+
+3. **Handling POST Requests:**
+
+   **Question:** Create a route to handle POST requests to '/submit' and log the request body to the console.
+
+   **Answer:**
+   ```javascript
+   app.post('/submit', (req, res) => {
+       console.log(req.body);
+       res.send('Data received');
+   });
+   ```
+
+4. **Middleware:**
+
+   **Question:** Define a middleware function that logs the request method and URL for each incoming request.
+
+   **Answer:**
+   ```javascript
+   app.use((req, res, next) => {
+       console.log(`${req.method} ${req.url}`);
+       next();
+   });
+   ```
+
+5. **Handling Route Parameters:**
+
+   **Question:** Write a route to handle GET requests to '/users/:id' and respond with the user ID.
+
+   **Answer:**
+   ```javascript
+   app.get('/users/:id', (req, res) => {
+       res.send(`User ID: ${req.params.id}`);
+   });
+   ```
+
+6. **Handling Query Parameters:**
+
+   **Question:** Create a route to handle GET requests to '/search' and respond with the value of the 'q' query parameter.
+
+   **Answer:**
+   ```javascript
+   app.get('/search', (req, res) => {
+       res.send(`Search query: ${req.query.q}`);
+   });
+   ```
+
+7. **Serving Static Files:**
+
+   **Question:** Serve static files located in the 'public' directory.
+
+   **Answer:**
+   ```javascript
+   app.use(express.static('public'));
+   ```
+
+8. **Using Router:**
+
+   **Question:** Create a router to handle routes related to authentication (e.g., login, logout).
+
+   **Answer:**
+   ```javascript
+   const authRouter = require('./routes/auth');
+   app.use('/auth', authRouter);
+   ```
+
+9. **Error Handling Middleware:**
+
+   **Question:** Define an error-handling middleware function that logs errors to the console.
+
+   **Answer:**
+   ```javascript
+   app.use((err, req, res, next) => {
+       console.error(err);
+       res.status(500).send('Internal Server Error');
+   });
+   ```
+
+10. **Route Chaining:**
+
+    **Question:** Define multiple route handlers for the same route '/profile', each handling different HTTP methods.
+
+    **Answer:**
+    ```javascript
+    app.route('/profile')
+       .get((req, res) => {
+           // Handle GET request
+       })
+       .post((req, res) => {
+           // Handle POST request
+       });
+    ```
+
+11. **Custom Middleware:**
+
+    **Question:** Write a middleware function that checks if the user is authenticated and redirects to the login page if not.
+
+    **Answer:**
+    ```javascript
+    function authenticate(req, res, next) {
+        if (!req.user) {
+            res.redirect('/login');
+        } else {
+            next();
+        }
+    }
+    ```
+
+12. **File Upload:**
+
+    **Question:** Implement a route to handle file uploads and save the uploaded file to the server.
+
+    **Answer:**
+    ```javascript
+    const multer = require('multer');
+    const upload = multer({ dest: 'uploads/' });
+
+    app.post('/upload', upload.single('file'), (req, res) => {
+        // File uploaded successfully
+        res.send('File uploaded');
+    });
+    ```
+
+13. **Session Management:**
+
+    **Question:** Configure Express to use session middleware for managing user sessions.
+
+    **Answer:**
+    ```javascript
+    const session = require('express-session');
+    app.use(session({ secret: 'secret-key', resave: false, saveUninitialized: true }));
+    ```
+
+14. **Redirecting:**
+
+    **Question:** Create a route to redirect requests from '/old' to '/new'.
+
+    **Answer:**
+    ```javascript
+    app.get('/old', (req, res) => {
+        res.redirect('/new');
+    });
+    ```
+
+15. **JSON Response:**
+
+    **Question:** Define a route to send a JSON response with user data.
+
+    **Answer:**
+    ```javascript
+    app.get('/user', (req, res) => {
+        res.json({ name: 'John', age: 30 });
+    });
+    ```
+
+16. **Using External Middleware:**
+
+    **Question:** Install and use the 'cors' middleware to enable CORS in your Express application.
+
+    **Answer:**
+    ```javascript
+    const cors = require('cors');
+    app.use(cors());
+    ```
+
+17. **View Rendering:**
+
+    **Question:** Configure Express to use the 'ejs' template engine for rendering views.
+
+    **Answer:**
+    ```javascript
+    app.set('view engine', 'ejs');
+    ```
+
+18. **Cookie Parsing:**
+
+    **Question:** Use the 'cookie-parser' middleware to parse cookies in incoming requests.
+
+    **Answer:**
+    ```javascript
+    const cookieParser = require('cookie-parser');
+    app.use(cookieParser());
+    ```
+
+19. **Session Authentication:**
+
+    **Question:** Implement session-based authentication using Express session middleware.
+
+    **Answer:**
+    ```javascript
+    app.use((req, res, next) => {
+        if (req.session && req.session.user) {
+            // User is authenticated
+            next();
+        } else {
+            res.redirect('/login');
+        }
+    });
+    ```
+
+20. **Using Express Router:**
+
+    **Question:** Create a router to handle routes related to user profile management (e.g., edit, delete).
+
+    **Answer:**
+    ```javascript
+    const profileRouter = require('./routes/profile');
+    app.use('/profile', profileRouter);
+    ```
+
+21. **Form Validation:**
+
+    **Question:** Implement server-side form validation middleware to validate form data before processing it.
+
+    **Answer:**
+    ```javascript
+    function validateForm(req, res, next) {
+        if (!req.body.username || !req.body.password) {
+            res.status(400).send('Username and password are required');
+        } else {
+            next();
+        }
+    }
+    ```
+
+22. **Using External Modules:**
+
+    **Question:** Install and use the 'bcrypt' module to hash passwords before storing them in the database.
+
+    **Answer:**
+    ```javascript
+    const bcrypt = require('bcrypt');
+    ```
+
+23. **Handling PUT Requests:**
+
+    **Question:** Create a route to handle PUT requests to update user data.
+
+    **Answer:**
+   
+
+ ```javascript
+    app.put('/user/:id', (req, res) => {
+        // Update user data
+        res.send('User data updated');
+    });
+    ```
+
+24. **Using Express Generator:**
+
+    **Question:** Generate a new Express application using the Express generator tool.
+
+    **Answer:**
+    ```
+    $ npm install -g express-generator
+    $ express myapp
+    ```
+
+25. **Using External Databases:**
+
+    **Question:** Install and use the 'mongoose' module to connect to a MongoDB database in your Express application.
+
+    **Answer:**
+    ```javascript
+    const mongoose = require('mongoose');
+    mongoose.connect('mongodb://localhost/myapp', { useNewUrlParser: true, useUnifiedTopology: true });
+    ```
+
+26. **Middleware to Check Authentication:**
+
+    **Question:** Write a middleware function to check if a user is logged in and has admin privileges.
+
+    **Answer:**
+    ```javascript
+    function isAdmin(req, res, next) {
+        if (req.user && req.user.isAdmin) {
+            next();
+        } else {
+            res.status(403).send('Forbidden');
+        }
+    }
+    ```
+
+27. **File Download:**
+
+    **Question:** Implement a route to allow users to download a file from the server.
+
+    **Answer:**
+    ```javascript
+    app.get('/download/:filename', (req, res) => {
+        const filename = req.params.filename;
+        res.download(`./uploads/${filename}`);
+    });
+    ```
+
+28. **Logging Middleware:**
+
+    **Question:** Write a middleware function to log request details to a file.
+
+    **Answer:**
+    ```javascript
+    const fs = require('fs');
+    app.use((req, res, next) => {
+        fs.appendFileSync('request.log', `${req.method} ${req.url}\n`);
+        next();
+    });
+    ```
+
+29. **Handling DELETE Requests:**
+
+    **Question:** Create a route to handle DELETE requests to delete user data.
+
+    **Answer:**
+    ```javascript
+    app.delete('/user/:id', (req, res) => {
+        // Delete user data
+        res.send('User data deleted');
+    });
+    ```
+
+30. **Authentication Middleware:**
+
+    **Question:** Write a middleware function to authenticate users using JSON Web Tokens (JWT).
+
+    **Answer:**
+    ```javascript
+    const jwt = require('jsonwebtoken');
+    function authenticate(req, res, next) {
+        const token = req.headers.authorization;
+        if (token) {
+            jwt.verify(token, 'secret-key', (err, decoded) => {
+                if (err) {
+                    res.status(401).send('Unauthorized');
+                } else {
+                    req.user = decoded;
+                    next();
+                }
+            });
+        } else {
+            res.status(401).send('Unauthorized');
+        }
+    }
+    ```
+
+31. **Handling PATCH Requests:**
+
+    **Question:** Create a route to handle PATCH requests to update specific fields of user data.
+
+    **Answer:**
+    ```javascript
+    app.patch('/user/:id', (req, res) => {
+        // Update specific fields of user data
+        res.send('User data updated');
+    });
+    ```
+
+32. **Pagination Middleware:**
+
+    **Question:** Write a middleware function to implement pagination for query results.
+
+    **Answer:**
+    ```javascript
+    function paginate(req, res, next) {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        req.pagination = {
+            page: page,
+            limit: limit,
+            startIndex: startIndex,
+            endIndex: endIndex
+        };
+        next();
+    }
+    ```
+
+33. **Rate Limiting Middleware:**
+
+    **Question:** Implement rate limiting middleware to limit the number of requests per IP address.
+
+    **Answer:**
+    ```javascript
+    const rateLimit = require('express-rate-limit');
+    const limiter = rateLimit({
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100 // limit each IP to 100 requests per windowMs
+    });
+    app.use(limiter);
+    ```
+
+34. **CRUD Operations with MongoDB:**
+
+    **Question:** Write a route to handle CRUD operations for a 'users' collection in a MongoDB database.
+
+    **Answer:**
+    ```javascript
+    const User = require('./models/user');
+    // Create
+    app.post('/users', (req, res) => {
+        const user = new User(req.body);
+        user.save()
+            .then(result => {
+                res.json(result);
+            })
+            .catch(err => {
+                res.status(400).send(err);
+            });
+    });
+    // Read
+    app.get('/users/:id', (req, res) => {
+        User.findById(req.params.id)
+            .then(user => {
+                res.json(user);
+            })
+            .catch(err => {
+                res.status(404).send('User not found');
+            });
+    });
+    // Update
+    app.put('/users/:id', (req, res) => {
+        User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            .then(user => {
+                res.json(user);
+            })
+            .catch(err => {
+                res.status(404).send('User not found');
+            });
+    });
+    // Delete
+    app.delete('/users/:id', (req, res) => {
+        User.findByIdAndDelete(req.params.id)
+            .then(user => {
+                res.json(user);
+            })
+            .catch(err => {
+                res.status(404).send('User not found');
+            });
+    });
+    ```
+
+35. **Handling File Uploads with Multer:**
+
+    **Question:** Implement a route to handle file uploads using Multer middleware and store uploaded files in the 'uploads' directory.
+
+    **Answer:**
+    ```javascript
+    const multer = require('multer');
+    const storage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, 'uploads/');
+        },
+        filename: (req, file, cb) => {
+            cb(null, Date.now() + '-' + file.originalname);
+        }
+    });
+    const upload = multer({ storage: storage });
+
+    app.post('/upload', upload.single('file'), (req, res) => {
+        res.send('File uploaded successfully');
+    });
+    ```
+
+36. **Handling JSON Web Tokens (JWT):**
+
+    **Question:** Create a route to handle user authentication using JWT.
+
+    **Answer:**
+    ```javascript
+    const jwt = require('jsonwebtoken');
+
+    app.post('/login', (req, res) => {
+        // Authenticate user
+        const user = { id: 1, username: 'user' };
+        const token = jwt.sign(user, 'secret-key');
+        res.json({ token: token });
+    });
+
+    app.get('/protected', (req, res) => {
+        jwt.verify(req.headers.authorization, 'secret-key', (err, decoded) => {
+            if (err) {
+                res.status(401).send('Unauthorized');
+            } else {
+                res.json(decoded);
+            }
+        });
+    });
+  <h2> Here are 5 coding practice questions specifically tailored for cracking interviews related to Express.js: </h2>
+
+1. **Middleware Implementation**:
+
+**Question**: Write a custom middleware function in Express.js that logs the timestamp of incoming requests along with the request method and URL.
+
+**Solution**:
+```javascript
+const express = require('express');
+const app = express();
+
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Define your routes here
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+2. **Route Parameter Handling**:
+
+**Question**: Create an Express.js route that accepts a product ID as a parameter and responds with the details of that product from a predefined array of products.
+
+**Solution**:
+```javascript
+const express = require('express');
+const app = express();
+
+const products = [
+    { id: 1, name: 'Product A', price: 10 },
+    { id: 2, name: 'Product B', price: 20 },
+    { id: 3, name: 'Product C', price: 30 }
+];
+
+app.get('/product/:id', (req, res) => {
+    const productId = parseInt(req.params.id);
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        res.json(product);
+    } else {
+        res.status(404).json({ error: 'Product not found' });
+    }
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+3. **File Upload Endpoint**:
+
+**Question**: Implement an Express.js route for handling file uploads. The endpoint should accept files and save them to a predefined directory on the server.
+
+**Solution**:
+```javascript
+const express = require('express');
+const multer = require('multer');
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.send('File uploaded successfully');
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+4. **Authentication Middleware**:
+
+**Question**: Develop an Express.js middleware function that checks for a valid authentication token in the request headers. If the token is missing or invalid, it should respond with a 401 Unauthorized status.
+
+**Solution**:
+```javascript
+const express = require('express');
+const app = express();
+
+const authenticate = (req, res, next) => {
+    const token = req.headers.authorization;
+    if (token === 'valid_token') {
+        next();
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+};
+
+app.get('/secure', authenticate, (req, res) => {
+    res.send('Access granted');
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+5. **Error Handling Middleware**:
+
+**Question**: Write an error-handling middleware function in Express.js that catches any unhandled errors in the application and responds with a 500 Internal Server Error status along with an error message.
+
+**Solution**:
+```javascript
+const express = require('express');
+const app = express();
+
+app.get('/error', (req, res, next) => {
+    try {
+        // Code that may throw an error
+        throw new Error('Oops! Something went wrong');
+    } catch (error) {
+        next(error); // Pass the error to the error-handling middleware
+    }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+````
+
+
+<h3> here are 30 express js question</h3>
+
+
+1. **File Upload Endpoint Answer**:
+```javascript
+const express = require('express');
+const multer = require('multer');
+const app = express();
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    res.send('File uploaded successfully');
+});
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+});
+```
+
+2. **JWT Authentication Middleware Answer**:
+```javascript
+const jwt = require('jsonwebtoken');
+
+const authenticate = (req, res, next) => {
+    const token = req.headers.authorization;
+    if (!token) {
+        return res.status(401).json({ error: 'Token required' });
+    }
+    try {
+        const decoded = jwt.verify(token, 'your_secret_key');
+        req.user = decoded.user;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: 'Invalid token' });
+    }
+};
+```
+
+3. **Pagination Middleware Answer**:
+```javascript
+const paginate = (req, res, next) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const results = {};
+
+    if (endIndex < data.length) {
+        results.next = {
+            page: page + 1,
+            limit: limit
+        };
+    }
+
+    if (startIndex > 0) {
+        results.previous = {
+            page: page - 1,
+            limit: limit
+        };
+    }
+
+    results.data = data.slice(startIndex, endIndex);
+
+    res.paginatedData = results;
+    next();
+};
+```
+
+4. **User Registration Endpoint Answer**:
+```javascript
+app.post('/register', (req, res) => {
+    // Handle user registration logic here
+});
+```
+
+5. **Password Encryption Utility Answer**:
+```javascript
+const bcrypt = require('bcrypt');
+
+const hashPassword = async (password) => {
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
+};
+```
+
+6. **User Login Endpoint Answer**:
+```javascript
+app.post('/login', (req, res) => {
+    // Handle user login logic here
+});
+```
+
+7. **Route-Level Authorization Middleware Answer**:
+```javascript
+const authorize = (roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        next();
+    };
+};
+```
+
+8. **Error Handling Middleware Answer**:
+```javascript
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
+});
+```
+
+9. **RESTful Todo List API Answer**:
+```javascript
+// Define routes for CRUD operations
+```
+
+10. **Email Verification Endpoint Answer**:
+```javascript
+app.get('/verify-email/:token', (req, res) => {
+    // Handle email verification logic here
+});
+```
+
+11. **Custom Response Formatting Middleware Answer**:
+```javascript
+const formatResponse = (req, res, next) => {
+    res.sendFormattedResponse = (data, statusCode) => {
+        res.status(statusCode || 200).json({ success: true, data: data });
+    };
+    next();
+};
+```
+
+12. **Password Reset Endpoint Answer**:
+```javascript
+app.post('/reset-password', (req, res) => {
+    // Handle password reset logic here
+});
+```
+
+13. **Static File Serving Middleware Answer**:
+```javascript
+app.use(express.static('public'));
+```
+
+14. **Database Connection Middleware Answer**:
+```javascript
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/your_database', { useNewUrlParser: true, useUnifiedTopology: true });
+```
+
+15. **Request Timeout Middleware Answer**:
+```javascript
+const requestTimeout = (req, res, next) => {
+    req.setTimeout(5000, () => {
+        res.status(408).send('Request Timeout');
+    });
+    next();
+};
+```
+
+16. **Rate Limiting Middleware Answer**:
+```javascript
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100
+});
+
+app.use(limiter);
+```
+
+17. **Image Upload API Answer**:
+```javascript
+// Use Multer middleware for handling file uploads
+```
+
+18. **Cross-Origin Resource Sharing (CORS) Middleware Answer**:
+```javascript
+const cors = require('cors');
+app.use(cors());
+```
+
+19. **GraphQL Endpoint Answer**:
+```javascript
+// Use Apollo Server for serving GraphQL queries
+```
+
+20. **Two-Factor Authentication Endpoint Answer**:
+```javascript
+app.post('/verify-otp', (req, res) => {
+    // Handle OTP verification logic here
+});
+```
+
+21. **Server-Sent Events (SSE) Endpoint Answer**:
+```javascript
+app.get('/sse', (req, res) => {
+    // Implement SSE logic here
+});
+```
+
+22. **Web Scraping Endpoint Answer**:
+```javascript
+app.get('/scrape', (req, res) => {
+    // Implement web scraping logic here
+});
+```
+
+23. **Session Management Middleware Answer**:
+```javascript
+const session = require('express-session');
+app.use(session({ secret: 'your_secret', resave: true, saveUninitialized: true }));
+```
+
+24. **Websocket Integration Middleware Answer**:
+```javascript
+const http = require('http');
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+```
+
+25. **IP Filtering Middleware Answer**:
+```javascript
+const ipFilter = (req, res, next) => {
+    // Implement IP filtering logic here
+};
+```
+
+26. **Health Check Endpoint Answer**:
+```javascript
+app.get('/health', (req, res) => {
+    res.send('Server is running');
+});
+```
+
+27. **Proxy Middleware Answer**:
+```javascript
+const httpProxy = require('http-proxy');
+const proxy = httpProxy.createProxyServer();
+
+app.use('/api', (req, res) => {
+    proxy.web(req, res, { target: 'http://example.com' });
+});
+```
+
+28. **Authentication with OAuth Endpoint Answer**:
+```javascript
+// Use passport.js for OAuth authentication
+```
+
+29. **Data Validation Middleware Answer**:
+```javascript
+const Joi = require('joi');
+
+const validateData = (schema) => {
+    return (req, res, next) => {
+        const { error } = schema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ error: error.details[0].message });
+        }
+        next();
+    };
+};
+```
+
+30. **Custom Error Handling Middleware Answer**:
+```javascript
+const errorHandler = (err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
+};
+app.use(errorHandler);
+```
+

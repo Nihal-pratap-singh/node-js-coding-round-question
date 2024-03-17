@@ -720,6 +720,7 @@ function processFiles(filePaths, callback) {
 processFiles(['file1.txt', 'file2.txt', 'file3.txt'], (contents) => {
   console.log('File Contents:', contents);
 });
+````
 
 <h3>sending files in Node.js</h3>
 
@@ -827,9 +828,9 @@ fileStream.on('data', (chunk) => {
 fileStream.on('end', () => {
     res.end();
 });
+``````
 
-
-<h1> file upload concepts in Node.js  </h1>
+<h2> file upload concepts in Node.js  </h2>
 
 1. **File Upload API Endpoint**:
 
@@ -990,123 +991,765 @@ app.post('/upload', authenticate, upload.single('file'), (req, res) => {
 });
 ```
 
-<h4>here are 50 question answer </h4>
+<h2> event , event loop , event emitter </h2>
 
-1. **Reverse a string:**
+1. **Understanding Event Emitters:**
    ```javascript
-   function reverseString(str) {
-       return str.split('').reverse().join('');
-   }
+   // Example of using Event Emitters in Node.js
+   const EventEmitter = require('events');
 
-   // Example usage:
-   console.log(reverseString("hello")); // Output: "olleh"
+   // Create a new EventEmitter instance
+   const myEmitter = new EventEmitter();
+
+   // Define an event
+   const eventName = 'greet';
+
+   // Listener function for the event
+   myEmitter.on(eventName, (name) => {
+       console.log(`Hello, ${name}!`);
+   });
+
+   // Emit the event with some data
+   myEmitter.emit(eventName, 'John');
    ```
 
-2. **Check if a string is a palindrome:**
+2. **Event Loop Mechanics:**
+   - The event loop in Node.js is a single-threaded mechanism that enables asynchronous I/O operations without blocking the execution of other tasks. It continuously checks for events and executes their associated callback functions. Below is a conceptual example:
    ```javascript
-   function isPalindrome(str) {
-       const reversed = str.split('').reverse().join('');
-       return str === reversed;
-   }
+   const fs = require('fs');
 
-   // Example usage:
-   console.log(isPalindrome("madam")); // Output: true
-   console.log(isPalindrome("hello")); // Output: false
-   ```
-
-3. **Find the maximum number in an array:**
-   ```javascript
-   function findMax(arr) {
-       return Math.max(...arr);
-   }
-
-   // Example usage:
-   console.log(findMax([5, 3, 9, 2])); // Output: 9
-   ```
-
-4. **Find the minimum number in an array:**
-   ```javascript
-   function findMin(arr) {
-       return Math.min(...arr);
-   }
-
-   // Example usage:
-   console.log(findMin([5, 3, 9, 2])); // Output: 2
-   ```
-
-5. **Implement a function to sort an array:**
-   ```javascript
-   function customSort(arr) {
-       return arr.sort((a, b) => a - b);
-   }
-
-   // Example usage:
-   console.log(customSort([5, 3, 9, 2])); // Output: [2, 3, 5, 9]
-   ```
-
-6. **Check if two strings are anagrams:**
-   ```javascript
-   function areAnagrams(str1, str2) {
-       const sortedStr1 = str1.split('').sort().join('');
-       const sortedStr2 = str2.split('').sort().join('');
-       return sortedStr1 === sortedStr2;
-   }
-
-   // Example usage:
-   console.log(areAnagrams("listen", "silent")); // Output: true
-   console.log(areAnagrams("hello", "world")); // Output: false
-   ```
-
-7. **Implement a function to remove duplicates from an array:**
-   ```javascript
-   function removeDuplicates(arr) {
-       return [...new Set(arr)];
-   }
-
-   // Example usage:
-   console.log(removeDuplicates([1, 2, 2, 3, 4, 4, 5])); // Output: [1, 2, 3, 4, 5]
-   ```
-
-8. **Check if a given number is prime:**
-   ```javascript
-   function isPrime(num) {
-       if (num <= 1) return false;
-       if (num === 2) return true;
-       for (let i = 2; i <= Math.sqrt(num); i++) {
-           if (num % i === 0) return false;
+   // Asynchronous file read operation
+   fs.readFile('example.txt', 'utf8', (err, data) => {
+       if (err) {
+           console.error('Error reading file:', err);
+           return;
        }
-       return true;
-   }
+       console.log('File data:', data);
+   });
 
-   // Example usage:
-   console.log(isPrime(7)); // Output: true
-   console.log(isPrime(10)); // Output: false
+   console.log('File read operation initiated.');
    ```
 
-9. **Implement a function to calculate the Fibonacci sequence:**
+3. **Custom Event Handling:**
    ```javascript
-   function fibonacci(n) {
-       if (n <= 1) return n;
-       return fibonacci(n - 1) + fibonacci(n - 2);
-   }
+   const EventEmitter = require('events');
 
-   // Example usage:
-   console.log(fibonacci(7)); // Output: 13 (0, 1, 1, 2, 3, 5, 8, 13)
+   class MyEmitter extends EventEmitter {}
+
+   const myEmitter = new MyEmitter();
+
+   // Event listeners
+   myEmitter.on('start', () => {
+       console.log('Starting process...');
+   });
+
+   myEmitter.on('finish', () => {
+       console.log('Process completed.');
+   });
+
+   // Emitting custom events
+   myEmitter.emit('start');
+   // Process logic...
+   myEmitter.emit('finish');
    ```
 
-10. **Implement a function to flatten a nested array:**
-    ```javascript
-    function flattenArray(arr) {
-        return arr.reduce((acc, val) => Array.isArray(val) ? acc.concat(flattenArray(val)) : acc.concat(val), []);
-    }
+4. **Event Emitter Inheritance:**
+   ```javascript
+   const EventEmitter = require('events');
 
-    // Example usage:
-    console.log(flattenArray([1, [2, [3, 4]], 5])); // Output: [1, 2, 3, 4, 5]
+   // Parent EventEmitter
+   class ParentEmitter extends EventEmitter {
+       constructor() {
+           super();
+       }
+   }
+
+   // Child EventEmitter inheriting from Parent
+   class ChildEmitter extends ParentEmitter {}
+
+   const parentEmitter = new ParentEmitter();
+   const childEmitter = new ChildEmitter();
+
+   // Event listeners
+   parentEmitter.on('parentEvent', () => {
+       console.log('Parent event triggered.');
+   });
+
+   // Inherited event listener
+   childEmitter.on('childEvent', () => {
+       console.log('Child event triggered.');
+   });
+
+   // Emit events
+   parentEmitter.emit('parentEvent');
+   childEmitter.emit('childEvent');
+   ```
+
+5. **Handling Memory Leaks with EventEmitters:**
+   - One common strategy to prevent memory leaks with EventEmitters in Node.js is to ensure that all event listeners are properly removed when they are no longer needed. This can be achieved using the `removeListener()` method. Here's an example:
+   ```javascript
+   const EventEmitter = require('events');
+
+   class MyEmitter extends EventEmitter {}
+
+   const myEmitter = new MyEmitter();
+
+   function listener() {
+       console.log('Event handled.');
+   }
+
+   // Adding event listener
+   myEmitter.on('event', listener);
+
+   // Removing event listener after it's no longer needed
+   setTimeout(() => {
+       myEmitter.removeListener('event', listener);
+       console.log('Event listener removed.');
+   }, 5000);
+   ```
+   <h4>Here are five important coding questions with answers for EventEmitter in Node.js:</h4> 
+
+1. **Question:** How do you create an instance of EventEmitter in Node.js?
+
+**Answer:**
+```javascript
+const EventEmitter = require('events');
+const myEmitter = new EventEmitter();
+```
+
+2. **Question:** How do you listen for an event using EventEmitter?
+
+**Answer:**
+```javascript
+myEmitter.on('eventName', () => {
+  console.log('Event occurred!');
+});
+```
+
+3. **Question:** How do you emit an event with data using EventEmitter?
+
+**Answer:**
+```javascript
+myEmitter.emit('eventName', data);
+```
+
+4. **Question:** How do you remove an event listener using EventEmitter?
+
+**Answer:**
+```javascript
+// Define the listener function
+const myListener = () => {
+  console.log('Event occurred!');
+};
+
+// Add the listener
+myEmitter.on('eventName', myListener);
+
+// Remove the listener
+myEmitter.removeListener('eventName', myListener);
+```
+
+5. **Question:** How do you handle one-time events with EventEmitter?
+
+**Answer:**
+```javascript
+myEmitter.once('eventName', () => {
+  console.log('This listener will only be called once.');
+});
+```
+Sure, here are five important coding questions related to process concept in Node.js along with their answers:
+
+1. **Question: How can you get the process ID (PID) of a Node.js application?**
+   
+   **Answer:** In Node.js, you can obtain the process ID (PID) using the `process.pid` property. Here's an example:
+
+   ```javascript
+   console.log("Process ID:", process.pid);
+   ```
+
+2. **Question: How can you handle command-line arguments passed to a Node.js application?**
+
+   **Answer:** Node.js provides access to command-line arguments through the `process.argv` array. Here's a simple example:
+
+   ```javascript
+   // Print all command-line arguments
+   process.argv.forEach((arg, index) => {
+       console.log(`Argument ${index}: ${arg}`);
+   });
+   ```
+
+3. **Question: How can you exit a Node.js application programmatically?**
+
+   **Answer:** You can exit a Node.js application programmatically by calling `process.exit(code)`, where `code` is an optional exit code. Here's an example:
+
+   ```javascript
+   // Exit the application with exit code 0 (success)
+   process.exit(0);
+   ```
+
+4. **Question: How can you set environment variables in a Node.js application?**
+
+   **Answer:** You can set environment variables using the `process.env` object. Here's how you can set and access an environment variable:
+
+   ```javascript
+   // Set an environment variable
+   process.env.PORT = 3000;
+
+   // Access the environment variable
+   console.log("Port:", process.env.PORT);
+   ```
+
+5. **Question: How can you listen for signals like SIGINT (Ctrl+C) in a Node.js application?**
+
+   **Answer:** You can listen for signals using the `process.on()` method. Here's how you can handle the SIGINT signal (Ctrl+C):
+
+   ```javascript
+   // Handle SIGINT signal (Ctrl+C)
+   process.on('SIGINT', () => {
+       console.log('Received SIGINT signal');
+       // Perform cleanup or exit the application
+       process.exit(0);
+   });
+   ```
+  <h5>Here are 20 important machine coding round questions related to RESTful concepts in Node.js at an intermediate level along with their answers:</h5> 
+
+1. **Question: Create a RESTful API endpoint to fetch a list of users from a database.**
+
+   Answer: 
+   ```javascript
+   const express = require('express');
+   const app = express();
+
+   // Mock user data
+   const users = [{ id: 1, name: 'John' }, { id: 2, name: 'Alice' }];
+
+   app.get('/users', (req, res) => {
+       res.json(users);
+   });
+
+   app.listen(3000, () => {
+       console.log('Server running on port 3000');
+   });
+   ```
+
+2. **Question: Implement an endpoint to add a new user to the database using POST request.**
+
+   Answer:
+   ```javascript
+   app.post('/users', (req, res) => {
+       const newUser = req.body;
+       users.push(newUser);
+       res.status(201).json(newUser);
+   });
+   ```
+
+3. **Question: Write a route to fetch details of a specific user by their ID.**
+
+   Answer:
+   ```javascript
+   app.get('/users/:id', (req, res) => {
+       const userId = parseInt(req.params.id);
+       const user = users.find(user => user.id === userId);
+       if (user) {
+           res.json(user);
+       } else {
+           res.status(404).json({ message: 'User not found' });
+       }
+   });
+   ```
+
+4. **Question: Implement an endpoint to update user details using PUT request.**
+
+   Answer:
+   ```javascript
+   app.put('/users/:id', (req, res) => {
+       const userId = parseInt(req.params.id);
+       const updateUser = req.body;
+       const index = users.findIndex(user => user.id === userId);
+       if (index !== -1) {
+           users[index] = { ...users[index], ...updateUser };
+           res.json(users[index]);
+       } else {
+           res.status(404).json({ message: 'User not found' });
+       }
+   });
+   ```
+
+5. **Question: Create a route to delete a user by their ID.**
+
+   Answer:
+   ```javascript
+   app.delete('/users/:id', (req, res) => {
+       const userId = parseInt(req.params.id);
+       const index = users.findIndex(user => user.id === userId);
+       if (index !== -1) {
+           const deletedUser = users.splice(index, 1);
+           res.json({ message: 'User deleted', user: deletedUser });
+       } else {
+           res.status(404).json({ message: 'User not found' });
+       }
+   });
+   ```
+
+6. **Question: Implement pagination for fetching users (limit and offset).**
+
+   Answer:
+   ```javascript
+   app.get('/users', (req, res) => {
+       const limit = parseInt(req.query.limit) || 10;
+       const offset = parseInt(req.query.offset) || 0;
+       const paginatedUsers = users.slice(offset, offset + limit);
+       res.json(paginatedUsers);
+   });
+   ```
+
+7. **Question: Add authentication middleware to secure user-related endpoints.**
+
+   Answer:
+   ```javascript
+   function authenticate(req, res, next) {
+       const token = req.headers.authorization;
+       if (token === 'secret_token') {
+           next();
+       } else {
+           res.status(401).json({ message: 'Unauthorized' });
+       }
+   }
+
+   app.use(authenticate);
+   ```
+
+8. **Question: Implement validation middleware to validate user input before processing.**
+
+   Answer:
+   ```javascript
+   function validateUser(req, res, next) {
+       const { name } = req.body;
+       if (!name) {
+           res.status(400).json({ message: 'Name is required' });
+       } else {
+           next();
+       }
+   }
+
+   app.post('/users', validateUser, (req, res) => {
+       // Add user to the database
+   });
+   ```
+
+9. **Question: Write a route to upload a user's profile picture.**
+
+   Answer:
+   ```javascript
+   const multer = require('multer');
+   const upload = multer({ dest: 'uploads/' });
+
+   app.post('/users/:id/profile-picture', upload.single('avatar'), (req, res) => {
+       const userId = parseInt(req.params.id);
+       const user = users.find(user => user.id === userId);
+       if (user) {
+           user.profilePicture = req.file.path;
+           res.json({ message: 'Profile picture uploaded successfully' });
+       } else {
+           res.status(404).json({ message: 'User not found' });
+       }
+   });
+   ```
+
+10. **Question: Implement rate limiting to restrict the number of requests per minute from a single IP address.**
+
+    Answer:
+    ```javascript
+    const rateLimit = require('express-rate-limit');
+    const limiter = rateLimit({
+        windowMs: 60 * 1000, // 1 minute
+        max: 100 // limit each IP to 100 requests per windowMs
+    });
+
+    app.use(limiter);
     ```
 
+11. **Question: Create a route to search for users by their name or email.**
+
+    Answer:
+    ```javascript
+    app.get('/users/search', (req, res) => {
+        const { q } = req.query;
+        const filteredUsers = users.filter(user => 
+            user.name.toLowerCase().includes(q.toLowerCase()) || 
+            user.email.toLowerCase().includes(q.toLowerCase())
+        );
+        res.json(filteredUsers);
+    });
+    ```
+
+12. **Question: Implement content compression to reduce response size and improve performance.**
+
+    Answer:
+    ```javascript
+    const compression = require('compression');
+    app.use(compression());
+    ```
+
+13. **Question: Write a route to handle file downloads.**
+
+    Answer:
+    ```javascript
+    app.get('/files/:filename', (req, res) => {
+        const filePath = `path/to/files/${req.params.filename}`;
+        res.download(filePath);
+    });
+    ```
+
+14. **Question: Implement a middleware to log incoming requests.**
+
+    Answer:
+    ```javascript
+    function logger(req, res, next) {
+        console.log(`${req.method} ${req.url}`);
+        next();
+    }
+
+    app.use(logger);
+    ```
+
+15. **Question: Create a route to handle error responses with proper HTTP status codes and messages.**
+
+    Answer:
+    ```javascript
+    app.use((err, req, res, next) => {
+        console.error(err.stack);
+        res.status(500).json({ message: 'Internal Server Error' });
+    });
+    ```
+
+16. **Question: Implement content negotiation to support response format based on client preferences (JSON, XML, etc.).**
+
+    Answer:
+    ```javascript
+    app.get('/users', (req, res) => {
+        const accept = req.headers['accept'];
+        if (accept === 'application/xml') {
+            // Generate XML response
+        } else {
+            res.json(users);
+        }
+    });
+    ```
+
+17. **Question: Write a route to handle batch operations for users (e.g., delete multiple users at once).**
+
+    Answer:
+    ```javascript
+    app.delete('/users', (req, res) => {
+        const userIds
+
+ = req.body.userIds;
+        userIds.forEach(id => {
+            const index = users.findIndex(user => user.id === id);
+            if (index !== -1) {
+                users.splice(index, 1);
+            }
+        });
+        res.json({ message: 'Users deleted successfully' });
+    });
+    ```
+
+18. **Question: Implement HATEOAS (Hypermedia as the Engine of Application State) in your API responses.**
+
+    Answer:
+    ```javascript
+    app.get('/users', (req, res) => {
+        const usersWithLinks = users.map(user => ({
+            ...user,
+            links: [
+                { rel: 'self', href: `/users/${user.id}` },
+                { rel: 'update', href: `/users/${user.id}`, method: 'PUT' },
+                { rel: 'delete', href: `/users/${user.id}`, method: 'DELETE' }
+            ]
+        }));
+        res.json(usersWithLinks);
+    });
+    ```
+
+19. **Question: Write a route to handle partial updates for user details.**
+
+    Answer:
+    ```javascript
+    app.patch('/users/:id', (req, res) => {
+        const userId = parseInt(req.params.id);
+        const updateUser = req.body;
+        const index = users.findIndex(user => user.id === userId);
+        if (index !== -1) {
+            users[index] = { ...users[index], ...updateUser };
+            res.json(users[index]);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    });
+    ```
+
+20. **Question: Implement content versioning in your API to support backward compatibility.**
+
+    Answer:
+    ```javascript
+    app.get('/v1/users', (req, res) => {
+        // Handle version 1 of the API
+    });
+
+    app.get('/v2/users', (req, res) => {
+        // Handle version 2 of the API
+    });
+    ```
+
+These questions and answers cover various aspects of building a RESTful API in Node.js, including CRUD operations, authentication, validation, file handling, error handling, content negotiation, and API versioning, suitable for an intermediate-level machine coding round.
+
+ Here are 10 important coding questions along with their answers for the buffer concept in Node.js at an intermediate level:
+
+1. **Question: How to create a buffer in Node.js?**
+
+   Answer:
+   ```javascript
+   const buf = Buffer.alloc(10); // Creates a buffer of size 10 bytes filled with zeros
+   ```
+
+2. **Question: Write code to convert a string to a buffer in Node.js.**
+
+   Answer:
+   ```javascript
+   const str = 'Hello, world!';
+   const buf = Buffer.from(str);
+   ```
+
+3. **Question: Implement a function to concatenate multiple buffers in Node.js.**
+
+   Answer:
+   ```javascript
+   function concatenateBuffers(buffers) {
+       return Buffer.concat(buffers);
+   }
+   ```
+
+4. **Question: How to encode a buffer to Base64 in Node.js?**
+
+   Answer:
+   ```javascript
+   const buf = Buffer.from('Hello, world!');
+   const base64Str = buf.toString('base64');
+   ```
+
+5. **Question: Write code to decode a Base64 string to a buffer in Node.js.**
+
+   Answer:
+   ```javascript
+   const base64Str = 'SGVsbG8sIHdvcmxkIQ==';
+   const buf = Buffer.from(base64Str, 'base64');
+   ```
+
+6. **Question: Implement a function to compare two buffers in Node.js.**
+
+   Answer:
+   ```javascript
+   function compareBuffers(buf1, buf2) {
+       return buf1.equals(buf2);
+   }
+   ```
+
+7. **Question: How to slice a buffer in Node.js?**
+
+   Answer:
+   ```javascript
+   const buf = Buffer.from('Hello, world!');
+   const slicedBuf = buf.slice(0, 5); // Slice from index 0 to 4
+   ```
+
+8. **Question: Write code to find the index of a substring in a buffer in Node.js.**
+
+   Answer:
+   ```javascript
+   const buf = Buffer.from('Hello, world!');
+   const index = buf.indexOf('world');
+   ```
+
+9. **Question: Implement a function to copy data from one buffer to another in Node.js.**
+
+   Answer:
+   ```javascript
+   function copyBuffer(source, target, targetStart, sourceStart, sourceEnd) {
+       source.copy(target, targetStart, sourceStart, sourceEnd);
+   }
+   ```
+
+10. **Question: How to convert a buffer to JSON in Node.js?**
+
+    Answer:
+    ```javascript
+    const buf = Buffer.from('{"name":"John","age":30}');
+    const json = buf.toJSON();
+    ```
+
+These questions and answers cover various aspects of working with buffers in Node.js, including creation, encoding, decoding, manipulation, comparison, slicing, searching, copying, and conversion to JSON, suitable for an intermediate-level understanding of buffer concepts.
 
 
 
 
+Certainly! Here are 10 important coding questions related to stream concepts in Node.js at an intermediate level along with their answers:
 
-These questions cover a variety of topics and difficulty levels commonly encountered in Node.js coding interviews.
+1. **Question: How do you create a readable stream to read data from a file in Node.js?**
+
+   Answer:
+   ```javascript
+   const fs = require('fs');
+   const readableStream = fs.createReadStream('example.txt');
+   ```
+
+2. **Question: Write code to pipe data from a readable stream to a writable stream in Node.js.**
+
+   Answer:
+   ```javascript
+   const fs = require('fs');
+   const readableStream = fs.createReadStream('input.txt');
+   const writableStream = fs.createWriteStream('output.txt');
+
+   readableStream.pipe(writableStream);
+   ```
+
+3. **Question: Implement a transform stream to convert data from uppercase to lowercase as it passes through.**
+
+   Answer:
+   ```javascript
+   const { Transform } = require('stream');
+
+   const uppercaseToLowercase = new Transform({
+       transform(chunk, encoding, callback) {
+           this.push(chunk.toString().toLowerCase());
+           callback();
+       }
+   });
+
+   process.stdin.pipe(uppercaseToLowercase).pipe(process.stdout);
+   ```
+
+4. **Question: How do you handle errors in streams in Node.js?**
+
+   Answer:
+   ```javascript
+   readableStream.on('error', (error) => {
+       console.error('Error reading from stream:', error);
+   });
+
+   writableStream.on('error', (error) => {
+       console.error('Error writing to stream:', error);
+   });
+   ```
+
+5. **Question: Implement a readable stream that generates random numbers and emits them.**
+
+   Answer:
+   ```javascript
+   const { Readable } = require('stream');
+
+   class RandomNumberStream extends Readable {
+       constructor(options) {
+           super(options);
+       }
+
+       _read(size) {
+           const randomNumber = Math.random();
+           this.push(randomNumber.toString());
+       }
+   }
+
+   const randomNumberStream = new RandomNumberStream();
+   randomNumberStream.pipe(process.stdout);
+   ```
+
+6. **Question: How can you pause and resume a readable stream in Node.js?**
+
+   Answer:
+   ```javascript
+   readableStream.pause();
+
+   // Do something else...
+
+   readableStream.resume();
+   ```
+
+7. **Question: Write code to create a writable stream that stores data in memory until it reaches a certain size limit, then flushes it to disk.**
+
+   Answer:
+   ```javascript
+   const { Writable } = require('stream');
+   const fs = require('fs');
+
+   class MemoryWritableStream extends Writable {
+       constructor(options) {
+           super(options);
+           this.buffer = [];
+           this.sizeLimit = 1024 * 1024; // 1MB
+       }
+
+       _write(chunk, encoding, callback) {
+           this.buffer.push(chunk);
+           if (Buffer.concat(this.buffer).length >= this.sizeLimit) {
+               fs.writeFile('output.txt', Buffer.concat(this.buffer), callback);
+               this.buffer = [];
+           } else {
+               callback();
+           }
+       }
+   }
+
+   const memoryWritableStream = new MemoryWritableStream();
+   process.stdin.pipe(memoryWritableStream);
+   ```
+
+8. **Question: How do you create a duplex stream in Node.js?**
+
+   Answer:
+   ```javascript
+   const { Duplex } = require('stream');
+
+   const duplexStream = new Duplex({
+       read(size) {
+           // Implement reading logic
+       },
+       write(chunk, encoding, callback) {
+           // Implement writing logic
+           callback();
+       }
+   });
+   ```
+
+9. **Question: Implement a writable stream that compresses data using gzip compression.**
+
+   Answer:
+   ```javascript
+   const { createGzip } = require('zlib');
+   const fs = require('fs');
+
+   const gzipStream = createGzip();
+   const writableStream = fs.createWriteStream('output.txt.gz');
+
+   process.stdin.pipe(gzipStream).pipe(writableStream);
+   ```
+
+10. **Question: How do you handle the end of a stream in Node.js?**
+
+    Answer:
+    ```javascript
+    readableStream.on('end', () => {
+        console.log('End of stream reached');
+    });
+
+    writableStream.on('finish', () => {
+        console.log('Data writing finished');
+    });
+    ```
+
+These questions and answers cover various aspects of working with streams in Node.js, including creating streams, piping data, error handling, stream events, and implementing custom stream logic, suitable for an intermediate-level understanding of stream concepts.
+
+
+
+These answers provide explanations and code examples to address the concepts and scenarios related to events and the event loop in Node.js.
+

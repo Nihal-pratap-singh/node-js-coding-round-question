@@ -1,165 +1,6 @@
 <h1> Here are 100  Node.js machine coding round questions with answers:</h1>
 
-1. **Question: Create a simple HTTP server in Node.js that returns "Hello, World!" when accessed.**
-```javascript
-// Answer:
-const http = require('http');
-const server = http.createServer((req, res) => {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello, World!\n');
-});
-server.listen(3000, 'localhost', () => {
-  console.log('Server running at http://localhost:3000/');
-});
-```
 
-2. **Question: Write a function in Node.js to find the factorial of a given number.**
-```javascript
-// Answer:
-function factorial(n) {
-  if (n === 0 || n === 1) return 1;
-  return n * factorial(n - 1);
-}
-console.log(factorial(5)); // Output: 120
-```
-
-3. **Question: Implement a basic CRUD (Create, Read, Update, Delete) API using Express.js and MongoDB.**
-```javascript
-// Answer:
-// (Assuming MongoDB is running locally)
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost/test', { useNewUrlParser: true, useUnifiedTopology: true });
-
-const app = express();
-app.use(bodyParser.json());
-
-const Schema = mongoose.Schema;
-const userSchema = new Schema({
-  name: String,
-  email: String,
-});
-
-const User = mongoose.model('User', userSchema);
-
-// Routes
-app.post('/users', async (req, res) => {
-  const user = new User(req.body);
-  await user.save();
-  res.send(user);
-});
-
-app.get('/users', async (req, res) => {
-  const users = await User.find();
-  res.send(users);
-});
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
-```
-
-4. **Question: Write a function in Node.js to reverse a string.**
-```javascript
-// Answer:
-function reverseString(str) {
-  return str.split('').reverse().join('');
-}
-console.log(reverseString('hello')); // Output: 'olleh'
-```
-
-5. **Question: Implement a basic authentication system using JSON Web Tokens (JWT) in Node.js.**
-```javascript
-// Answer:
-const jwt = require('jsonwebtoken');
-const secretKey = 'your-secret-key';
-
-function generateToken(user) {
-  return jwt.sign({ user }, secretKey, { expiresIn: '1h' });
-}
-
-function verifyToken(token) {
-  try {
-    return jwt.verify(token, secretKey);
-  } catch (err) {
-    return null;
-  }
-}
-
-const user = { id: 1, username: 'example_user' };
-const token = generateToken(user);
-console.log(token);
-
-const decoded = verifyToken(token);
-console.log(decoded);
-```
-
-6. **Question: Write a function in Node.js to check if a given string is a palindrome.**
-```javascript
-// Answer:
-function isPalindrome(str) {
-  const reversed = str.split('').reverse().join('');
-  return str === reversed;
-}
-console.log(isPalindrome('racecar')); // Output: true
-```
-
-7. **Question: Create a script in Node.js to read a JSON file and print its content.**
-```javascript
-// Answer:
-const fs = require('fs');
-
-fs.readFile('data.json', 'utf8', (err, data) => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-  console.log(data);
-});
-```
-
-8. **Question: Implement a function in Node.js to find the maximum number in an array.**
-```javascript
-// Answer:
-function findMax(arr) {
-  return Math.max(...arr);
-}
-console.log(findMax([1, 5, 3, 9, 2])); // Output: 9
-```
-
-9. **Question: Write a function in Node.js to sort an array of numbers in ascending order.**
-```javascript
-// Answer:
-function sortAscending(arr) {
-  return arr.sort((a, b) => a - b);
-}
-console.log(sortAscending([3, 1, 4, 2])); // Output: [1, 2, 3, 4]
-```
-
-10. **Question: Create a script in Node.js to make an HTTP request to an external API and log the response.**
-```javascript
-// Answer:
-const https = require('https');
-
-https.get('https://api.example.com/data', (resp) => {
-  let data = '';
-
-  // A chunk of data has been received.
-  resp.on('data', (chunk) => {
-    data += chunk;
-  });
-
-  // The whole response has been received. Print out the result.
-  resp.on('end', () => {
-    console.log(JSON.parse(data));
-  });
-
-}).on('error', (err) => {
-  console.log('Error: ' + err.message);
-});
-```
 
 <h1>Here are five coding questions that focus on the callback concept in Node.js, which are commonly asked in job interviews:</h1>
 
@@ -378,6 +219,174 @@ fileStream.on('end', () => {
 <h2> file upload concepts in Node.js  </h2>
 
 1. **File Upload API Endpoint**:
+2. **Formidable based question***
+
+1. File Upload and Parsing:
+```javascript
+const http = require('http');
+const formidable = require('formidable');
+
+http.createServer(function(req, res) {
+  if (req.url == '/upload' && req.method.toLowerCase() === 'post') {
+    const form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+      if (err) throw err;
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify({ fields, files }));
+    });
+    return;
+  }
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(`
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" multiple>
+      <input type="submit" value="Upload">
+    </form>
+  `);
+}).listen(8080);
+```
+
+2. Image Resizing on Upload: (assuming you have the `sharp` library installed)
+```javascript
+const http = require('http');
+const formidable = require('formidable');
+const sharp = require('sharp');
+
+http.createServer(function(req, res) {
+  if (req.url == '/upload' && req.method.toLowerCase() === 'post') {
+    const form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+      if (err) throw err;
+      const image = files.file.path;
+      sharp(image)
+        .resize(200, 200)
+        .toFile('resized_image.jpg', function(err) {
+          if (err) throw err;
+          res.writeHead(200, {'Content-Type': 'text/plain'});
+          res.end('Image uploaded and resized successfully');
+        });
+    });
+    return;
+  }
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(`
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+    </form>
+  `);
+}).listen(8080);
+```
+
+3. Form Data Processing:
+```javascript
+const http = require('http');
+const formidable = require('formidable');
+const fs = require('fs');
+
+http.createServer(function(req, res) {
+  if (req.url == '/submit' && req.method.toLowerCase() === 'post') {
+    const form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+      if (err) throw err;
+      // Store fields data to JSON file or database
+      fs.writeFileSync('formData.json', JSON.stringify(fields));
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('Form data submitted successfully');
+    });
+    return;
+  }
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(`
+    <form action="/submit" method="post">
+      <input type="text" name="name" placeholder="Name" required><br>
+      <input type="email" name="email" placeholder="Email" required><br>
+      <textarea name="message" placeholder="Message" required></textarea><br>
+      <input type="submit" value="Submit">
+    </form>
+  `);
+}).listen(8080);
+```
+
+4. Real-time Progress Tracking: (assuming you have a WebSocket server running)
+```javascript
+const http = require('http');
+const formidable = require('formidable');
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({ port: 8081 });
+
+http.createServer(function(req, res) {
+  if (req.url == '/upload' && req.method.toLowerCase() === 'post') {
+    const form = new formidable.IncomingForm();
+    form.on('file', function(name, file) {
+      // Handle file upload progress here
+      wss.clients.forEach(function(client) {
+        client.send(`File ${name} is being uploaded`);
+      });
+    });
+    form.parse(req, function(err, fields, files) {
+      if (err) throw err;
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end('File uploaded successfully');
+    });
+    return;
+  }
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(`
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+    </form>
+  `);
+}).listen(8080);
+```
+
+5. Multiple File Upload and Zip Creation:
+```javascript
+const http = require('http');
+const formidable = require('formidable');
+const fs = require('fs');
+const archiver = require('archiver');
+
+http.createServer(function(req, res) {
+  if (req.url == '/upload' && req.method.toLowerCase() === 'post') {
+    const form = new formidable.IncomingForm();
+    const filesArr = [];
+    form.on('file', function(name, file) {
+      filesArr.push(file);
+    });
+    form.on('end', function() {
+      const zipName = 'uploaded_files.zip';
+      const output = fs.createWriteStream(zipName);
+      const archive = archiver('zip');
+      output.on('close', function() {
+        res.writeHead(200, {
+          'Content-Type': 'application/zip',
+          'Content-disposition': `attachment; filename=${zipName}`
+        });
+        fs.createReadStream(zipName).pipe(res);
+      });
+      archive.pipe(output);
+      filesArr.forEach(function(file) {
+        archive.file(file.path, { name: file.name });
+      });
+      archive.finalize();
+    });
+    form.parse(req);
+    return;
+  }
+  res.writeHead(200, {'Content-Type': 'text/html'});
+  res.end(`
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" multiple>
+      <input type="submit" value="Upload">
+    </form>
+  `);
+}).listen(8080);
+```
+
+These examples provide basic functionality and may need further customization or error handling depending on your specific requirements.
 
 **Question**:
 Write a Node.js API endpoint using Express.js that accepts file uploads. The endpoint should accept multipart form-data POST requests containing a file, and upon successful upload, should respond with a success message. Include error handling for cases where no file is provided or if the file size exceeds a specified limit.
